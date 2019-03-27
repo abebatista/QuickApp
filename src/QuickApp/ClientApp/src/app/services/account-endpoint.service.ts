@@ -11,10 +11,8 @@ import { catchError } from 'rxjs/operators';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 
-
 @Injectable()
 export class AccountEndpoint extends EndpointFactory {
-
   private readonly _usersUrl: string = '/api/account/users';
   private readonly _userByUserNameUrl: string = '/api/account/users/username';
   private readonly _currentUserUrl: string = '/api/account/users/me';
@@ -33,15 +31,9 @@ export class AccountEndpoint extends EndpointFactory {
   get roleByRoleNameUrl() { return this.configurations.baseUrl + this._roleByRoleNameUrl; }
   get permissionsUrl() { return this.configurations.baseUrl + this._permissionsUrl; }
 
-
-
   constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
-
     super(http, configurations, injector);
   }
-
-
-
 
   getUserEndpoint<T>(userId?: string): Observable<T> {
     const endpointUrl = userId ? `${this.usersUrl}/${userId}` : this.currentUserUrl;
@@ -52,7 +44,6 @@ export class AccountEndpoint extends EndpointFactory {
       }));
   }
 
-
   getUserByUserNameEndpoint<T>(userName: string): Observable<T> {
     const endpointUrl = `${this.userByUserNameUrl}/${userName}`;
 
@@ -61,7 +52,6 @@ export class AccountEndpoint extends EndpointFactory {
         return this.handleError(error, () => this.getUserByUserNameEndpoint(userName));
       }));
   }
-
 
   getUsersEndpoint<T>(page?: number, pageSize?: number): Observable<T> {
     const endpointUrl = page && pageSize ? `${this.usersUrl}/${page}/${pageSize}` : this.usersUrl;
@@ -72,9 +62,7 @@ export class AccountEndpoint extends EndpointFactory {
       }));
   }
 
-
   getNewUserEndpoint<T>(userObject: any): Observable<T> {
-
     return this.http.post<T>(this.usersUrl, JSON.stringify(userObject), this.getRequestHeaders()).pipe<T>(
       catchError(error => {
         return this.handleError(error, () => this.getNewUserEndpoint(userObject));
@@ -113,9 +101,7 @@ export class AccountEndpoint extends EndpointFactory {
       }));
   }
 
-
   getUserPreferencesEndpoint<T>(): Observable<T> {
-
     return this.http.get<T>(this.currentUserPreferencesUrl, this.getRequestHeaders()).pipe<T>(
       catchError(error => {
         return this.handleError(error, () => this.getUserPreferencesEndpoint());
@@ -147,10 +133,6 @@ export class AccountEndpoint extends EndpointFactory {
       }));
   }
 
-
-
-
-
   getRoleEndpoint<T>(roleId: string): Observable<T> {
     const endpointUrl = `${this.rolesUrl}/${roleId}`;
 
@@ -160,7 +142,6 @@ export class AccountEndpoint extends EndpointFactory {
       }));
   }
 
-
   getRoleByRoleNameEndpoint<T>(roleName: string): Observable<T> {
     const endpointUrl = `${this.roleByRoleNameUrl}/${roleName}`;
 
@@ -169,8 +150,6 @@ export class AccountEndpoint extends EndpointFactory {
         return this.handleError(error, () => this.getRoleByRoleNameEndpoint(roleName));
       }));
   }
-
-
 
   getRolesEndpoint<T>(page?: number, pageSize?: number): Observable<T> {
     const endpointUrl = page && pageSize ? `${this.rolesUrl}/${page}/${pageSize}` : this.rolesUrl;
@@ -182,7 +161,6 @@ export class AccountEndpoint extends EndpointFactory {
   }
 
   getNewRoleEndpoint<T>(roleObject: any): Observable<T> {
-
     return this.http.post<T>(this.rolesUrl, JSON.stringify(roleObject), this.getRequestHeaders()).pipe<T>(
       catchError(error => {
         return this.handleError(error, () => this.getNewRoleEndpoint(roleObject));
@@ -207,9 +185,7 @@ export class AccountEndpoint extends EndpointFactory {
       }));
   }
 
-
   getPermissionsEndpoint<T>(): Observable<T> {
-
     return this.http.get<T>(this.permissionsUrl, this.getRequestHeaders()).pipe<T>(
       catchError(error => {
         return this.handleError(error, () => this.getPermissionsEndpoint());

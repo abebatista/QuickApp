@@ -3,13 +3,10 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
+using DAL.Models.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using DAL.Models.Interfaces;
 
 namespace DAL.Models
 {
@@ -22,12 +19,13 @@ namespace DAL.Models
                 string friendlyName = string.IsNullOrWhiteSpace(FullName) ? UserName : FullName;
 
                 if (!string.IsNullOrWhiteSpace(JobTitle))
+                {
                     friendlyName = $"{JobTitle} {friendlyName}";
+                }
 
                 return friendlyName;
             }
         }
-
 
         public string JobTitle { get; set; }
         public string FullName { get; set; }
@@ -39,8 +37,6 @@ namespace DAL.Models
         public string UpdatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-
-
 
         /// <summary>
         /// Navigation property for the roles this user belongs to.

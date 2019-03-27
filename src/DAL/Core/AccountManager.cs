@@ -7,10 +7,9 @@
 // ==> https://www.ebenmonney.com/shop
 // ====================================
 
-using DAL;
+using AspNet.Security.OpenIdConnect.Primitives;
 using DAL.Core.Interfaces;
 using DAL.Models;
-using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using DAL.Core;
 
 namespace DAL.Core
 {
@@ -29,7 +26,6 @@ namespace DAL.Core
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-
 
         public AccountManager(
             ApplicationDbContext context,
@@ -42,9 +38,6 @@ namespace DAL.Core
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
-
-
 
         public async Task<ApplicationUser> GetUserByIdAsync(string userId)
         {
@@ -66,7 +59,6 @@ namespace DAL.Core
             return await _userManager.GetRolesAsync(user);
         }
 
-
         public async Task<Tuple<ApplicationUser, string[]>> GetUserAndRolesAsync(string userId)
         {
             var user = await _context.Users
@@ -75,7 +67,9 @@ namespace DAL.Core
                 .SingleOrDefaultAsync();
 
             if (user == null)
+            {
                 return null;
+            }
 
             var userRoleIds = user.Roles.Select(r => r.RoleId).ToList();
 
@@ -87,7 +81,6 @@ namespace DAL.Core
             return Tuple.Create(user, roles);
         }
 
-
         public async Task<List<Tuple<ApplicationUser, string[]>>> GetUsersAndRolesAsync(int page, int pageSize)
         {
             IQueryable<ApplicationUser> usersQuery = _context.Users
@@ -95,10 +88,14 @@ namespace DAL.Core
                 .OrderBy(u => u.UserName);
 
             if (page != -1)
+            {
                 usersQuery = usersQuery.Skip((page - 1) * pageSize);
+            }
 
             if (pageSize != -1)
+            {
                 usersQuery = usersQuery.Take(pageSize);
+            }
 
             var users = await usersQuery.ToListAsync();
 
@@ -113,13 +110,13 @@ namespace DAL.Core
                 .ToList();
         }
 
-
         public async Task<Tuple<bool, string[]>> CreateUserAsync(ApplicationUser user, IEnumerable<string> roles, string password)
         {
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
+            {
                 return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
-
+            }
 
             user = await _userManager.FindByNameAsync(user.UserName);
 
@@ -142,19 +139,18 @@ namespace DAL.Core
             return Tuple.Create(true, new string[] { });
         }
 
-
         public async Task<Tuple<bool, string[]>> UpdateUserAsync(ApplicationUser user)
         {
             return await UpdateUserAsync(user, null);
         }
 
-
         public async Task<Tuple<bool, string[]>> UpdateUserAsync(ApplicationUser user, IEnumerable<string> roles)
         {
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
+            {
                 return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
-
+            }
 
             if (roles != null)
             {
@@ -167,20 +163,23 @@ namespace DAL.Core
                 {
                     result = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
                     if (!result.Succeeded)
+                    {
                         return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
+                    }
                 }
 
                 if (rolesToAdd.Any())
                 {
                     result = await _userManager.AddToRolesAsync(user, rolesToAdd);
                     if (!result.Succeeded)
+                    {
                         return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
+                    }
                 }
             }
 
             return Tuple.Create(true, new string[] { });
         }
-
 
         public async Task<Tuple<bool, string[]>> ResetPasswordAsync(ApplicationUser user, string newPassword)
         {
@@ -188,7 +187,9 @@ namespace DAL.Core
 
             var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
             if (!result.Succeeded)
+            {
                 return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
+            }
 
             return Tuple.Create(true, new string[] { });
         }
@@ -197,7 +198,9 @@ namespace DAL.Core
         {
             var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
             if (!result.Succeeded)
+            {
                 return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
+            }
 
             return Tuple.Create(true, new string[] { });
         }
@@ -207,7 +210,9 @@ namespace DAL.Core
             if (!await _userManager.CheckPasswordAsync(user, password))
             {
                 if (!_userManager.SupportsUserLockout)
+                {
                     await _userManager.AccessFailedAsync(user);
+                }
 
                 return false;
             }
@@ -215,28 +220,29 @@ namespace DAL.Core
             return true;
         }
 
-
         public async Task<bool> TestCanDeleteUserAsync(string userId)
         {
             if (await _context.Orders.Where(o => o.CashierId == userId).AnyAsync())
+            {
                 return false;
+            }
 
             //canDelete = !await ; //Do other tests...
 
             return true;
         }
 
-
         public async Task<Tuple<bool, string[]>> DeleteUserAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user != null)
+            {
                 return await DeleteUserAsync(user);
+            }
 
             return Tuple.Create(true, new string[] { });
         }
-
 
         public async Task<Tuple<bool, string[]>> DeleteUserAsync(ApplicationUser user)
         {
@@ -244,22 +250,15 @@ namespace DAL.Core
             return Tuple.Create(result.Succeeded, result.Errors.Select(e => e.Description).ToArray());
         }
 
-
-
-
-
-
         public async Task<ApplicationRole> GetRoleByIdAsync(string roleId)
         {
             return await _roleManager.FindByIdAsync(roleId);
         }
 
-
         public async Task<ApplicationRole> GetRoleByNameAsync(string roleName)
         {
             return await _roleManager.FindByNameAsync(roleName);
         }
-
 
         public async Task<ApplicationRole> GetRoleLoadRelatedAsync(string roleName)
         {
@@ -272,7 +271,6 @@ namespace DAL.Core
             return role;
         }
 
-
         public async Task<List<ApplicationRole>> GetRolesLoadRelatedAsync(int page, int pageSize)
         {
             IQueryable<ApplicationRole> rolesQuery = _context.Roles
@@ -281,31 +279,38 @@ namespace DAL.Core
                 .OrderBy(r => r.Name);
 
             if (page != -1)
+            {
                 rolesQuery = rolesQuery.Skip((page - 1) * pageSize);
+            }
 
             if (pageSize != -1)
+            {
                 rolesQuery = rolesQuery.Take(pageSize);
+            }
 
             var roles = await rolesQuery.ToListAsync();
 
             return roles;
         }
 
-
         public async Task<Tuple<bool, string[]>> CreateRoleAsync(ApplicationRole role, IEnumerable<string> claims)
         {
             if (claims == null)
+            {
                 claims = new string[] { };
+            }
 
             string[] invalidClaims = claims.Where(c => ApplicationPermissions.GetPermissionByValue(c) == null).ToArray();
             if (invalidClaims.Any())
+            {
                 return Tuple.Create(false, new[] { "The following claim types are invalid: " + string.Join(", ", invalidClaims) });
-
+            }
 
             var result = await _roleManager.CreateAsync(role);
             if (!result.Succeeded)
+            {
                 return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
-
+            }
 
             role = await _roleManager.FindByNameAsync(role.Name);
 
@@ -329,14 +334,16 @@ namespace DAL.Core
             {
                 string[] invalidClaims = claims.Where(c => ApplicationPermissions.GetPermissionByValue(c) == null).ToArray();
                 if (invalidClaims.Any())
+                {
                     return Tuple.Create(false, new[] { "The following claim types are invalid: " + string.Join(", ", invalidClaims) });
+                }
             }
-
 
             var result = await _roleManager.UpdateAsync(role);
             if (!result.Succeeded)
+            {
                 return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
-
+            }
 
             if (claims != null)
             {
@@ -352,7 +359,9 @@ namespace DAL.Core
                     {
                         result = await _roleManager.RemoveClaimAsync(role, roleClaims.Where(c => c.Value == claim).FirstOrDefault());
                         if (!result.Succeeded)
+                        {
                             return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
+                        }
                     }
                 }
 
@@ -362,7 +371,9 @@ namespace DAL.Core
                     {
                         result = await _roleManager.AddClaimAsync(role, new Claim(CustomClaimTypes.Permission, ApplicationPermissions.GetPermissionByValue(claim)));
                         if (!result.Succeeded)
+                        {
                             return Tuple.Create(false, result.Errors.Select(e => e.Description).ToArray());
+                        }
                     }
                 }
             }
@@ -370,23 +381,22 @@ namespace DAL.Core
             return Tuple.Create(true, new string[] { });
         }
 
-
         public async Task<bool> TestCanDeleteRoleAsync(string roleId)
         {
             return !await _context.UserRoles.Where(r => r.RoleId == roleId).AnyAsync();
         }
-
 
         public async Task<Tuple<bool, string[]>> DeleteRoleAsync(string roleName)
         {
             var role = await _roleManager.FindByNameAsync(roleName);
 
             if (role != null)
+            {
                 return await DeleteRoleAsync(role);
+            }
 
             return Tuple.Create(true, new string[] { });
         }
-
 
         public async Task<Tuple<bool, string[]>> DeleteRoleAsync(ApplicationRole role)
         {

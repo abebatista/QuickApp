@@ -11,7 +11,6 @@ import { DBkeys } from './db-keys';
 import { Utilities } from './utilities';
 import { environment } from '../../environments/environment';
 
-
 interface UserConfiguration {
   language: string;
   homeUrl: string;
@@ -22,10 +21,8 @@ interface UserConfiguration {
   showDashboardBanner: boolean;
 }
 
-
 @Injectable()
 export class ConfigurationService {
-
   public static readonly appVersion: string = '2.7.1';
 
   // ***Specify default configurations here***
@@ -50,11 +47,9 @@ export class ConfigurationService {
   private _showDashboardTodo: boolean = null;
   private _showDashboardBanner: boolean = null;
 
-
   constructor(private localStorage: LocalStoreManager, private translationService: AppTranslationService) {
     this.loadLocalChanges();
   }
-
 
   set language(value: string) {
     this._language = value;
@@ -68,7 +63,6 @@ export class ConfigurationService {
     return ConfigurationService.defaultLanguage;
   }
 
-
   set homeUrl(value: string) {
     this._homeUrl = value;
     this.saveToLocalStore(value, DBkeys.HOME_URL);
@@ -79,7 +73,6 @@ export class ConfigurationService {
 
     return ConfigurationService.defaultHomeUrl;
   }
-
 
   set theme(value: string) {
     this._theme = value;
@@ -92,7 +85,6 @@ export class ConfigurationService {
     return ConfigurationService.defaultTheme;
   }
 
-
   set showDashboardStatistics(value: boolean) {
     this._showDashboardStatistics = value;
     this.saveToLocalStore(value, DBkeys.SHOW_DASHBOARD_STATISTICS);
@@ -103,7 +95,6 @@ export class ConfigurationService {
 
     return ConfigurationService.defaultShowDashboardStatistics;
   }
-
 
   set showDashboardNotifications(value: boolean) {
     this._showDashboardNotifications = value;
@@ -116,7 +107,6 @@ export class ConfigurationService {
     return ConfigurationService.defaultShowDashboardNotifications;
   }
 
-
   set showDashboardTodo(value: boolean) {
     this._showDashboardTodo = value;
     this.saveToLocalStore(value, DBkeys.SHOW_DASHBOARD_TODO);
@@ -127,7 +117,6 @@ export class ConfigurationService {
 
     return ConfigurationService.defaultShowDashboardTodo;
   }
-
 
   set showDashboardBanner(value: boolean) {
     this._showDashboardBanner = value;
@@ -140,10 +129,7 @@ export class ConfigurationService {
     return ConfigurationService.defaultShowDashboardBanner;
   }
 
-
-
   private loadLocalChanges() {
-
     if (this.localStorage.exists(DBkeys.LANGUAGE)) {
       this._language = this.localStorage.getDataObject<string>(DBkeys.LANGUAGE);
       this.translationService.changeLanguage(this._language);
@@ -171,14 +157,11 @@ export class ConfigurationService {
       this._showDashboardBanner = this.localStorage.getDataObject<boolean>(DBkeys.SHOW_DASHBOARD_BANNER);
   }
 
-
   private saveToLocalStore(data: any, key: string) {
     setTimeout(() => this.localStorage.savePermanentData(data, key));
   }
 
-
   public import(jsonValue: string) {
-
     this.clearLocalChanges();
 
     if (!jsonValue)
@@ -208,9 +191,7 @@ export class ConfigurationService {
       this.showDashboardBanner = importValue.showDashboardBanner;
   }
 
-
   public export(changesOnly = true): string {
-
     const exportValue: UserConfiguration = {
       language: changesOnly ? this._language : this.language,
       homeUrl: changesOnly ? this._homeUrl : this.homeUrl,
@@ -223,7 +204,6 @@ export class ConfigurationService {
 
     return JSON.stringify(exportValue);
   }
-
 
   public clearLocalChanges() {
     this._language = null;
@@ -244,7 +224,6 @@ export class ConfigurationService {
 
     this.resetLanguage();
   }
-
 
   private resetLanguage() {
     const language = this.translationService.useBrowserLanguage();

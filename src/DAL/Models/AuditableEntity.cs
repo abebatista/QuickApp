@@ -3,11 +3,9 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
 using DAL.Models.Interfaces;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Models
 {
@@ -15,8 +13,10 @@ namespace DAL.Models
     {
         [MaxLength(256)]
         public string CreatedBy { get; set; }
+
         [MaxLength(256)]
         public string UpdatedBy { get; set; }
+
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

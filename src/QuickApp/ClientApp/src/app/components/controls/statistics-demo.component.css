@@ -1,8 +1,6 @@
-
 .chart-container {
     display: block;
 }
-
 
 .refresh-btn {
     margin-right: 10px;
@@ -11,7 +9,6 @@
 .chart-type-container {
     display: inline-block;
 }
-
 
 li.active2 {
     background-color: #e8e8e8;

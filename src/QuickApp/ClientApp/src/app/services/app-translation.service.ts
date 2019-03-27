@@ -7,25 +7,19 @@ import { Injectable } from '@angular/core';
 import { TranslateService, TranslateLoader } from '@ngx-translate/core';
 import { Observable, Subject, of } from 'rxjs';
 
-
-
 @Injectable()
 export class AppTranslationService {
-
   readonly defaultLanguage = 'en';
   private onLanguageChanged = new Subject<string>();
   languageChanged$ = this.onLanguageChanged.asObservable();
 
   constructor(private translate: TranslateService) {
-
     this.setDefaultLanguage(this.defaultLanguage);
   }
-
 
   addLanguages(lang: string[]) {
     this.translate.addLangs(lang);
   }
-
 
   setDefaultLanguage(lang: string) {
     this.translate.setDefaultLang(lang);
@@ -39,7 +33,6 @@ export class AppTranslationService {
     return this.translate.getBrowserLang();
   }
 
-
   useBrowserLanguage(): string | void {
     const browserLang = this.getBrowserLanguage();
 
@@ -50,7 +43,6 @@ export class AppTranslationService {
   }
 
   changeLanguage(language: string = 'en') {
-
     if (!language)
       language = this.translate.defaultLang;
 
@@ -64,25 +56,17 @@ export class AppTranslationService {
     return language;
   }
 
-
   getTranslation(key: string | Array<string>, interpolateParams?: Object): string | any {
     return this.translate.instant(key, interpolateParams);
   }
 
-
   getTranslationAsync(key: string | Array<string>, interpolateParams?: Object): Observable<string | any> {
     return this.translate.get(key, interpolateParams);
   }
-
 }
 
-
-
-
 export class TranslateLanguageLoader implements TranslateLoader {
-
   public getTranslation(lang: string): any {
-
     // Note Dynamic require(variable) will not work. Require is always at compile time
 
     switch (lang) {

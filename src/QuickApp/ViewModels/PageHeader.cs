@@ -3,12 +3,6 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace QuickApp.ViewModels
 {
     public class PageHeader
@@ -20,7 +14,6 @@ namespace QuickApp.ViewModels
             this.TotalItems = totalItems;
             this.TotalPages = totalPages;
         }
-
 
         public int CurrentPage { get; set; }
         public int ItemsPerPage { get; set; }

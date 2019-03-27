@@ -31,15 +31,10 @@ export class EndpointFactory {
     return this._authService;
   }
 
-
-
   constructor(protected http: HttpClient, protected configurations: ConfigurationService, private injector: Injector) {
-
   }
 
-
   getLoginEndpoint<T>(userName: string, password: string): Observable<T> {
-
     const header = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
     const params = new HttpParams()
@@ -53,9 +48,7 @@ export class EndpointFactory {
     return this.http.post<T>(this.loginUrl, requestBody, { headers: header });
   }
 
-
   getRefreshLoginEndpoint<T>(): Observable<T> {
-
     const header = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
     const params = new HttpParams()
@@ -71,8 +64,6 @@ export class EndpointFactory {
       }));
   }
 
-
-
   protected getRequestHeaders(): { headers: HttpHeaders | { [header: string]: string | string[]; } } {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + this.authService.accessToken,
@@ -84,10 +75,7 @@ export class EndpointFactory {
     return { headers: headers };
   }
 
-
-
   protected handleError(error, continuation: () => Observable<any>) {
-
     if (error.status == 401) {
       if (this.isRefreshingLogin) {
         return this.pauseTask(continuation);
@@ -128,8 +116,6 @@ export class EndpointFactory {
     }
   }
 
-
-
   private pauseTask(continuation: () => Observable<any>) {
     if (!this.taskPauser)
       this.taskPauser = new Subject();
@@ -138,7 +124,6 @@ export class EndpointFactory {
       return continueOp ? continuation() : throwError('session expired');
     }));
   }
-
 
   private resumeTasks(continueOp: boolean) {
     setTimeout(() => {

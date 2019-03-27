@@ -3,9 +3,9 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
-using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace QuickApp.Migrations
 {

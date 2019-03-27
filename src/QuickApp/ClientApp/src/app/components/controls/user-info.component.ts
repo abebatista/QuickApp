@@ -13,14 +13,12 @@ import { UserEdit } from '../../models/user-edit.model';
 import { Role } from '../../models/role.model';
 import { Permission } from '../../models/permission.model';
 
-
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css']
 })
 export class UserInfoComponent implements OnInit {
-
   private isEditMode = false;
   private isNewUser = false;
   private isSaving = false;
@@ -44,10 +42,6 @@ export class UserInfoComponent implements OnInit {
 
   @Input()
   isGeneralEditor = false;
-
-
-
-
 
   @ViewChild('f')
   private form;
@@ -77,7 +71,6 @@ export class UserInfoComponent implements OnInit {
   @ViewChild('rolesSelector')
   private rolesSelector;
 
-
   constructor(private alertService: AlertService, private accountService: AccountService) {
   }
 
@@ -86,8 +79,6 @@ export class UserInfoComponent implements OnInit {
       this.loadCurrentUserData();
     }
   }
-
-
 
   private loadCurrentUserData() {
     this.alertService.startLoadingMessage();
@@ -104,7 +95,6 @@ export class UserInfoComponent implements OnInit {
     }
   }
 
-
   private onCurrentUserDataLoadSuccessful(user: User, roles: Role[]) {
     this.alertService.stopLoadingMessage();
     this.user = user;
@@ -120,18 +110,13 @@ export class UserInfoComponent implements OnInit {
     this.user = new User();
   }
 
-
-
   private getRoleByName(name: string) {
     return this.allRoles.find((r) => r.name == name);
   }
 
-
-
   private showErrorAlert(caption: string, message: string) {
     this.alertService.showMessage(caption, message, MessageSeverity.error);
   }
-
 
   public deletePasswordFromUser(user: UserEdit | User) {
     const userEdit = <UserEdit>user;
@@ -140,7 +125,6 @@ export class UserInfoComponent implements OnInit {
     delete userEdit.newPassword;
     delete userEdit.confirmPassword;
   }
-
 
   private edit() {
     if (!this.isGeneralEditor) {
@@ -160,7 +144,6 @@ export class UserInfoComponent implements OnInit {
     this.isChangePassword = false;
   }
 
-
   private save() {
     this.isSaving = true;
     this.alertService.startLoadingMessage('Saving changes...');
@@ -172,7 +155,6 @@ export class UserInfoComponent implements OnInit {
       this.accountService.updateUser(this.userEdit).subscribe(response => this.saveSuccessHelper(), error => this.saveFailedHelper(error));
     }
   }
-
 
   private saveSuccessHelper(user?: User) {
     this.testIsRoleUserCountChanged(this.user, this.userEdit);
@@ -189,7 +171,6 @@ export class UserInfoComponent implements OnInit {
     Object.assign(this.user, this.userEdit);
     this.userEdit = new UserEdit();
     this.resetForm();
-
 
     if (this.isGeneralEditor) {
       if (this.isNewUser) {
@@ -208,11 +189,9 @@ export class UserInfoComponent implements OnInit {
 
     this.isEditMode = false;
 
-
     if (this.changesSavedCallback)
       this.changesSavedCallback();
   }
-
 
   private saveFailedHelper(error: any) {
     this.isSaving = false;
@@ -224,10 +203,7 @@ export class UserInfoComponent implements OnInit {
       this.changesFailedCallback();
   }
 
-
-
   private testIsRoleUserCountChanged(currentUser: User, editedUser: User) {
-
     const rolesAdded = this.isNewUser ? editedUser.roles : editedUser.roles.filter(role => currentUser.roles.indexOf(role) == -1);
     const rolesRemoved = this.isNewUser ? [] : currentUser.roles.filter(role => editedUser.roles.indexOf(role) == -1);
 
@@ -236,8 +212,6 @@ export class UserInfoComponent implements OnInit {
     if (modifiedRoles.length)
       setTimeout(() => this.accountService.onRolesUserCountChanged(modifiedRoles));
   }
-
-
 
   private cancel() {
     if (this.isGeneralEditor)
@@ -258,7 +232,6 @@ export class UserInfoComponent implements OnInit {
       this.changesCancelledCallback();
   }
 
-
   private close() {
     this.userEdit = this.user = new UserEdit();
     this.showValidationErrors = false;
@@ -268,8 +241,6 @@ export class UserInfoComponent implements OnInit {
     if (this.changesSavedCallback)
       this.changesSavedCallback();
   }
-
-
 
   private refreshLoggedInUser() {
     this.accountService.refreshLoggedInUser()
@@ -283,16 +254,13 @@ export class UserInfoComponent implements OnInit {
         });
   }
 
-
   private changePassword() {
     this.isChangePassword = true;
   }
 
-
   private unlockUser() {
     this.isSaving = true;
     this.alertService.startLoadingMessage('Unblocking user...');
-
 
     this.accountService.unblockUser(this.userEdit.id)
       .subscribe(response => {
@@ -310,7 +278,6 @@ export class UserInfoComponent implements OnInit {
         });
   }
 
-
   resetForm(replace = false) {
     this.isChangePassword = false;
 
@@ -325,7 +292,6 @@ export class UserInfoComponent implements OnInit {
       });
     }
   }
-
 
   newUser(allRoles: Role[]) {
     this.isGeneralEditor = true;
@@ -360,9 +326,7 @@ export class UserInfoComponent implements OnInit {
     }
   }
 
-
   displayUser(user: User, allRoles?: Role[]) {
-
     this.user = new User();
     Object.assign(this.user, user);
     this.deletePasswordFromUser(this.user);
@@ -371,10 +335,7 @@ export class UserInfoComponent implements OnInit {
     this.isEditMode = false;
   }
 
-
-
   private setRoles(user: User, allRoles?: Role[]) {
-
     this.allRoles = allRoles ? [...allRoles] : [];
 
     if (user.roles) {
@@ -387,8 +348,6 @@ export class UserInfoComponent implements OnInit {
     if (allRoles == null || this.allRoles.length != allRoles.length)
       setTimeout(() => this.rolesSelector.refresh());
   }
-
-
 
   get canViewAllRoles() {
     return this.accountService.userHasPermission(Permission.viewRolesPermission);

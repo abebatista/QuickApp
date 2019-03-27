@@ -3,18 +3,15 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using DAL;
-using QuickApp.ViewModels;
 using AutoMapper;
-using DAL.Models;
+using DAL;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using QuickApp.Helpers;
-using Microsoft.Extensions.Options;
+using QuickApp.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace QuickApp.Controllers
 {
@@ -22,9 +19,8 @@ namespace QuickApp.Controllers
     public class CustomerController : Controller
     {
         private IUnitOfWork _unitOfWork;
-        readonly ILogger _logger;
-        readonly IEmailSender _emailer;
-
+        private readonly ILogger _logger;
+        private readonly IEmailSender _emailer;
 
         public CustomerController(IUnitOfWork unitOfWork, ILogger<CustomerController> logger, IEmailSender emailer)
         {
@@ -32,8 +28,6 @@ namespace QuickApp.Controllers
             _logger = logger;
             _emailer = emailer;
         }
-
-
 
         // GET: api/values
         [HttpGet]
@@ -43,15 +37,11 @@ namespace QuickApp.Controllers
             return Ok(Mapper.Map<IEnumerable<CustomerViewModel>>(allCustomers));
         }
 
-
-
         [HttpGet("throw")]
         public IEnumerable<CustomerViewModel> Throw()
         {
             throw new InvalidOperationException("This is a test exception: " + DateTime.Now);
         }
-
-
 
         [HttpGet("email")]
         public async Task<string> Email()
@@ -64,12 +54,12 @@ namespace QuickApp.Controllers
             (bool success, string errorMsg) = await _emailer.SendEmailAsync(recepientName, recepientEmail, "Test Email from QuickApp", message);
 
             if (success)
+            {
                 return "Success";
+            }
 
             return "Error: " + errorMsg;
         }
-
-
 
         // GET api/values/5
         [HttpGet("{id}")]
@@ -78,23 +68,17 @@ namespace QuickApp.Controllers
             return "value: " + id;
         }
 
-
-
         // POST api/values
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
 
-
-
         // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
-
-
 
         // DELETE api/values/5
         [HttpDelete("{id}")]

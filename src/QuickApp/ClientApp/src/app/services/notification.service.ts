@@ -11,11 +11,8 @@ import { AuthService } from './auth.service';
 import { NotificationEndpoint } from './notification-endpoint.service';
 import { Notification } from '../models/notification.model';
 
-
-
 @Injectable()
 export class NotificationService {
-
   private lastNotificationDate: Date;
   private _recentNotifications: Notification[];
 
@@ -27,41 +24,30 @@ export class NotificationService {
     this._recentNotifications = notifications;
   }
 
-
-
   constructor(private notificationEndpoint: NotificationEndpoint, private authService: AuthService) {
-
   }
 
-
   getNotification(notificationId?: number) {
-
     return this.notificationEndpoint.getNotificationEndpoint(notificationId).pipe(
       map(response => Notification.Create(response)));
   }
 
-
   getNotifications(page: number, pageSize: number) {
-
     return this.notificationEndpoint.getNotificationsEndpoint(page, pageSize).pipe(
       map(response => {
         return this.getNotificationsFromResponse(response);
       }));
   }
 
-
   getUnreadNotifications(userId?: string) {
-
     return this.notificationEndpoint.getUnreadNotificationsEndpoint(userId).pipe(
       map(response => this.getNotificationsFromResponse(response)));
   }
-
 
   getNewNotifications() {
     return this.notificationEndpoint.getNewNotificationsEndpoint(this.lastNotificationDate).pipe(
       map(response => this.processNewNotificationsFromResponse(response)));
   }
-
 
   getNewNotificationsPeriodically() {
     return interval(10000).pipe(
@@ -72,11 +58,7 @@ export class NotificationService {
       }));
   }
 
-
-
-
   pinUnpinNotification(notificationOrNotificationId: number | Notification, isPinned?: boolean): Observable<any> {
-
     if (typeof notificationOrNotificationId === 'number' || notificationOrNotificationId instanceof Number) {
       return this.notificationEndpoint.getPinUnpinNotificationEndpoint(<number>notificationOrNotificationId, isPinned);
     }
@@ -85,17 +67,11 @@ export class NotificationService {
     }
   }
 
-
   readUnreadNotification(notificationIds: number[], isRead: boolean): Observable<any> {
-
     return this.notificationEndpoint.getReadUnreadNotificationEndpoint(notificationIds, isRead);
   }
 
-
-
-
   deleteNotification(notificationOrNotificationId: number | Notification): Observable<Notification> {
-
     if (typeof notificationOrNotificationId === 'number' || notificationOrNotificationId instanceof Number) {
       return this.notificationEndpoint.getDeleteNotificationEndpoint(<number>notificationOrNotificationId).pipe(
         map(response => {
@@ -108,9 +84,6 @@ export class NotificationService {
     }
   }
 
-
-
-
   private processNewNotificationsFromResponse(response) {
     const notifications = this.getNotificationsFromResponse(response);
 
@@ -121,7 +94,6 @@ export class NotificationService {
 
     return notifications;
   }
-
 
   private getNotificationsFromResponse(response) {
     const notifications: Notification[] = [];
@@ -138,8 +110,6 @@ export class NotificationService {
 
     return notifications;
   }
-
-
 
   get currentUser() {
     return this.authService.currentUser;

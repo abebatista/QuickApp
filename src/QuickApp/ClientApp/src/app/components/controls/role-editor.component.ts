@@ -10,14 +10,12 @@ import { AccountService } from '../../services/account.service';
 import { Role } from '../../models/role.model';
 import { Permission } from '../../models/permission.model';
 
-
 @Component({
   selector: 'app-role-editor',
   templateUrl: './role-editor.component.html',
   styleUrls: ['./role-editor.component.css']
 })
 export class RoleEditorComponent {
-
   private isNewRole = false;
   private isSaving: boolean;
   private showValidationErrors = true;
@@ -32,21 +30,15 @@ export class RoleEditorComponent {
   public changesFailedCallback: () => void;
   public changesCancelledCallback: () => void;
 
-
   @ViewChild('f')
   private form;
-
-
 
   constructor(private alertService: AlertService, private accountService: AccountService) {
   }
 
-
-
   private showErrorAlert(caption: string, message: string) {
     this.alertService.showMessage(caption, message, MessageSeverity.error);
   }
-
 
   private save() {
     this.isSaving = true;
@@ -64,9 +56,6 @@ export class RoleEditorComponent {
     }
   }
 
-
-
-
   private saveSuccessHelper(role?: Role) {
     if (role)
       Object.assign(this.roleEdit, role);
@@ -83,10 +72,8 @@ export class RoleEditorComponent {
         MessageSeverity.success);
     }
 
-
     this.roleEdit = new Role();
     this.resetForm();
-
 
     if (!this.isNewRole && this.accountService.currentUser.roles.some(r => r == this.editingRoleName))
       this.refreshLoggedInUser();
@@ -94,7 +81,6 @@ export class RoleEditorComponent {
     if (this.changesSavedCallback)
       this.changesSavedCallback();
   }
-
 
   private refreshLoggedInUser() {
     this.accountService.refreshLoggedInUser()
@@ -106,8 +92,6 @@ export class RoleEditorComponent {
         });
   }
 
-
-
   private saveFailedHelper(error: any) {
     this.isSaving = false;
     this.alertService.stopLoadingMessage();
@@ -117,7 +101,6 @@ export class RoleEditorComponent {
     if (this.changesFailedCallback)
       this.changesFailedCallback();
   }
-
 
   private cancel() {
     this.roleEdit = new Role();
@@ -132,17 +115,13 @@ export class RoleEditorComponent {
       this.changesCancelledCallback();
   }
 
-
-
   private selectAll() {
     this.allPermissions.forEach(p => this.selectedValues[p.value] = true);
   }
 
-
   private selectNone() {
     this.allPermissions.forEach(p => this.selectedValues[p.value] = false);
   }
-
 
   private toggleGroup(groupName: string) {
     let firstMemberValue: boolean;
@@ -158,14 +137,11 @@ export class RoleEditorComponent {
     });
   }
 
-
   private getSelectedPermissions() {
     return this.allPermissions.filter(p => this.selectedValues[p.value] == true);
   }
 
-
   resetForm(replace = false) {
-
     if (!replace) {
       this.form.reset();
     }
@@ -177,7 +153,6 @@ export class RoleEditorComponent {
       });
     }
   }
-
 
   newRole(allPermissions: Permission[]) {
     this.isNewRole = true;
@@ -209,8 +184,6 @@ export class RoleEditorComponent {
       return this.newRole(allPermissions);
     }
   }
-
-
 
   get canManageRoles() {
     return this.accountService.userHasPermission(Permission.manageRolesPermission);

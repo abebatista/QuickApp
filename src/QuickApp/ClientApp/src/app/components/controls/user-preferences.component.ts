@@ -13,14 +13,12 @@ import { AccountService } from '../../services/account.service';
 import { Utilities } from '../../services/utilities';
 import { Permission } from '../../models/permission.model';
 
-
 @Component({
   selector: 'app-user-preferences',
   templateUrl: './user-preferences.component.html',
   styleUrls: ['./user-preferences.component.css']
 })
 export class UserPreferencesComponent implements OnInit, OnDestroy {
-
   themeSelectorToggle = true;
 
   languageChangedSubscription: any;
@@ -51,8 +49,6 @@ export class UserPreferencesComponent implements OnInit, OnDestroy {
     this.languageChangedSubscription.unsubscribe();
   }
 
-
-
   reloadFromServer() {
     this.alertService.startLoadingMessage();
 
@@ -63,7 +59,6 @@ export class UserPreferencesComponent implements OnInit, OnDestroy {
         this.configurations.import(results);
 
         this.alertService.showMessage('Defaults loaded!', '', MessageSeverity.info);
-
       },
         error => {
           this.alertService.stopLoadingMessage();
@@ -86,7 +81,6 @@ export class UserPreferencesComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         this.alertService.stopLoadingMessage();
         this.alertService.showMessage('New Defaults', 'Account defaults updated successfully', MessageSeverity.success);
-
       },
         error => {
           this.alertService.stopLoadingMessage();
@@ -95,8 +89,6 @@ export class UserPreferencesComponent implements OnInit, OnDestroy {
             MessageSeverity.error, error);
         });
   }
-
-
 
   resetDefault() {
     this.alertService.showDialog('Are you sure you want to reset your defaults?', DialogType.confirm,
@@ -112,7 +104,6 @@ export class UserPreferencesComponent implements OnInit, OnDestroy {
         this.alertService.stopLoadingMessage();
         this.configurations.import(null);
         this.alertService.showMessage('Defaults Reset', 'Account defaults reset completed successfully', MessageSeverity.success);
-
       },
         error => {
           this.alertService.stopLoadingMessage();
@@ -121,9 +112,6 @@ export class UserPreferencesComponent implements OnInit, OnDestroy {
             MessageSeverity.error, error);
         });
   }
-
-
-
 
   get canViewCustomers() {
     return this.accountService.userHasPermission(Permission.viewUsersPermission); // eg. viewCustomersPermission

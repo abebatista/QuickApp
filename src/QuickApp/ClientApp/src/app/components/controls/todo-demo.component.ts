@@ -12,8 +12,6 @@ import { AppTranslationService } from '../../services/app-translation.service';
 import { LocalStoreManager } from '../../services/local-store-manager.service';
 import { Utilities } from '../../services/utilities';
 
-
-
 @Component({
   selector: 'app-todo-demo',
   templateUrl: './todo-demo.component.html',
@@ -33,7 +31,6 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
   _currentUserId: string;
   _hideCompletedTasks = false;
 
-
   get currentUserId() {
     if (this.authService.currentUser)
       this._currentUserId = this.authService.currentUser.id;
@@ -41,16 +38,13 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
     return this._currentUserId;
   }
 
-
   set hideCompletedTasks(value: boolean) {
-
     if (value) {
       this.rows = this.rowsCache.filter(r => !r.completed);
     }
     else {
       this.rows = [...this.rowsCache];
     }
-
 
     this._hideCompletedTasks = value;
   }
@@ -59,10 +53,8 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
     return this._hideCompletedTasks;
   }
 
-
   @Input()
   verticalScrollbar = false;
-
 
   @ViewChild('statusHeaderTemplate')
   statusHeaderTemplate: TemplateRef<any>;
@@ -82,13 +74,9 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
   @ViewChild('editorModal')
   editorModal: ModalDirective;
 
-
   constructor(private alertService: AlertService, private translationService: AppTranslationService,
     private localStorage: LocalStoreManager, private authService: AuthService) {
-
   }
-
-
 
   ngOnInit() {
     this.loadingIndicator = true;
@@ -101,7 +89,6 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
 
       setTimeout(() => { this.loadingIndicator = false; }, 1500);
     });
-
 
     const gT = (key: string) => this.translationService.getTranslation(key);
 
@@ -123,14 +110,11 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
     this.saveToDisk();
   }
 
-
-
   fetch(cb) {
     let data = this.getFromDisk();
 
     if (data == null) {
       setTimeout(() => {
-
         data = this.getFromDisk();
 
         if (data == null) {
@@ -157,7 +141,6 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
     }
   }
 
-
   refreshDataIndexes(data) {
     let index = 0;
 
@@ -166,17 +149,14 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
     }
   }
 
-
   onSearchChanged(value: string) {
     this.rows = this.rowsCache.filter(r => Utilities.searchArray(value, false, r.name, r.description) ||
       value == 'important' && r.important || value == 'not important' && !r.important);
   }
 
-
   showErrorAlert(caption: string, message: string) {
     this.alertService.showMessage(caption, message, MessageSeverity.error);
   }
-
 
   addTask() {
     this.formResetToggle = false;
@@ -199,7 +179,6 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
     this.editorModal.hide();
   }
 
-
   updateValue(event, cell, cellValue, row) {
     this.editing[row.$$index + '-' + cell] = false;
     this.rows[row.$$index][cell] = event.target.value;
@@ -208,11 +187,9 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
     this.saveToDisk();
   }
 
-
   delete(row) {
     this.alertService.showDialog('Are you sure you want to delete the task?', DialogType.confirm, () => this.deleteHelper(row));
   }
-
 
   deleteHelper(row) {
     this.rowsCache = this.rowsCache.filter(item => item !== row);

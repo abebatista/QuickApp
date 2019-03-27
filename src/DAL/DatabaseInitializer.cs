@@ -3,17 +3,14 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
+using DAL.Core;
+using DAL.Core.Interfaces;
 using DAL.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using DAL.Core;
-using DAL.Core.Interfaces;
 
 namespace DAL
 {
@@ -21,9 +18,6 @@ namespace DAL
     {
         Task SeedAsync();
     }
-
-
-
 
     public class DatabaseInitializer : IDatabaseInitializer
     {
@@ -57,8 +51,6 @@ namespace DAL
 
                 _logger.LogInformation("Inbuilt account generation completed");
             }
-
-
 
             if (!await _context.Customers.AnyAsync() && !await _context.ProductCategories.AnyAsync())
             {
@@ -111,8 +103,6 @@ namespace DAL
                     DateModified = DateTime.UtcNow
                 };
 
-
-
                 ProductCategory prodCat_1 = new ProductCategory
                 {
                     Name = "None",
@@ -120,8 +110,6 @@ namespace DAL
                     DateCreated = DateTime.UtcNow,
                     DateModified = DateTime.UtcNow
                 };
-
-
 
                 Product prod_1 = new Product
                 {
@@ -149,8 +137,6 @@ namespace DAL
                     DateModified = DateTime.UtcNow
                 };
 
-
-
                 Order ordr_1 = new Order
                 {
                     Discount = 500,
@@ -177,7 +163,6 @@ namespace DAL
                     }
                 };
 
-
                 _context.Customers.Add(cust_1);
                 _context.Customers.Add(cust_2);
                 _context.Customers.Add(cust_3);
@@ -195,8 +180,6 @@ namespace DAL
             }
         }
 
-
-
         private async Task EnsureRoleAsync(string roleName, string description, string[] claims)
         {
             if ((await _accountManager.GetRoleByNameAsync(roleName)) == null)
@@ -206,7 +189,9 @@ namespace DAL
                 var result = await this._accountManager.CreateRoleAsync(applicationRole, claims);
 
                 if (!result.Item1)
+                {
                     throw new Exception($"Seeding \"{description}\" role failed. Errors: {string.Join(Environment.NewLine, result.Item2)}");
+                }
             }
         }
 
@@ -225,8 +210,9 @@ namespace DAL
             var result = await _accountManager.CreateUserAsync(applicationUser, roles, password);
 
             if (!result.Item1)
+            {
                 throw new Exception($"Seeding \"{userName}\" user failed. Errors: {string.Join(Environment.NewLine, result.Item2)}");
-
+            }
 
             return applicationUser;
         }

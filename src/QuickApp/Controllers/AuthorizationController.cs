@@ -3,27 +3,22 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using AspNet.Security.OpenIdConnect.Extensions;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication;
-using AspNet.Security.OpenIdConnect.Server;
-using OpenIddict.Core;
 using AspNet.Security.OpenIdConnect.Primitives;
-using DAL.Models;
 using DAL.Core;
+using DAL.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Security.Claims;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
-
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 
 namespace QuickApp.Controllers
 {
@@ -42,7 +37,6 @@ namespace QuickApp.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
-
 
         [HttpPost("~/connect/token")]
         [Produces("application/json")]
@@ -69,7 +63,6 @@ namespace QuickApp.Controllers
                         ErrorDescription = "The specified user account is disabled"
                     });
                 }
-
 
                 // Validate the username/password parameters and ensure the account is not locked out.
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
@@ -112,8 +105,6 @@ namespace QuickApp.Controllers
                         ErrorDescription = "Please check that your email and password is correct"
                     });
                 }
-
-
 
                 // Create a new authentication ticket.
                 var ticket = await CreateTicketAsync(request, user);
@@ -171,7 +162,6 @@ namespace QuickApp.Controllers
             // Create a new authentication ticket holding the user identity.
             var ticket = new AuthenticationTicket(principal, new AuthenticationProperties(), OpenIddictServerDefaults.AuthenticationScheme);
 
-
             //if (!request.IsRefreshTokenGrantType())
             //{
             // Set the list of scopes granted to the client application.
@@ -198,8 +188,9 @@ namespace QuickApp.Controllers
             {
                 // Never include the security stamp in the access and identity tokens, as it's a secret value.
                 if (claim.Type == _identityOptions.Value.ClaimsIdentity.SecurityStampClaimType)
+                {
                     continue;
-
+                }
 
                 var destinations = new List<string> { OpenIdConnectConstants.Destinations.AccessToken };
 
@@ -213,38 +204,44 @@ namespace QuickApp.Controllers
                     destinations.Add(OpenIdConnectConstants.Destinations.IdentityToken);
                 }
 
-
                 claim.SetDestinations(destinations);
             }
 
-
             var identity = principal.Identity as ClaimsIdentity;
-
 
             if (ticket.HasScope(OpenIdConnectConstants.Scopes.Profile))
             {
                 if (!string.IsNullOrWhiteSpace(user.JobTitle))
+                {
                     identity.AddClaim(CustomClaimTypes.JobTitle, user.JobTitle, OpenIdConnectConstants.Destinations.IdentityToken);
+                }
 
                 if (!string.IsNullOrWhiteSpace(user.FullName))
+                {
                     identity.AddClaim(CustomClaimTypes.FullName, user.FullName, OpenIdConnectConstants.Destinations.IdentityToken);
+                }
 
                 if (!string.IsNullOrWhiteSpace(user.Configuration))
+                {
                     identity.AddClaim(CustomClaimTypes.Configuration, user.Configuration, OpenIdConnectConstants.Destinations.IdentityToken);
+                }
             }
 
             if (ticket.HasScope(OpenIdConnectConstants.Scopes.Email))
             {
                 if (!string.IsNullOrWhiteSpace(user.Email))
+                {
                     identity.AddClaim(CustomClaimTypes.Email, user.Email, OpenIdConnectConstants.Destinations.IdentityToken);
+                }
             }
 
             if (ticket.HasScope(OpenIdConnectConstants.Scopes.Phone))
             {
                 if (!string.IsNullOrWhiteSpace(user.PhoneNumber))
+                {
                     identity.AddClaim(CustomClaimTypes.Phone, user.PhoneNumber, OpenIdConnectConstants.Destinations.IdentityToken);
+                }
             }
-
 
             return ticket;
         }

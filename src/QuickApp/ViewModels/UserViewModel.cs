@@ -3,15 +3,8 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
-using DAL.Models;
-using FluentValidation;
 using QuickApp.Helpers;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
 
 namespace QuickApp.ViewModels
 {
@@ -40,9 +33,6 @@ namespace QuickApp.ViewModels
         [MinimumCount(1, ErrorMessage = "Roles cannot be empty")]
         public string[] Roles { get; set; }
     }
-
-
-
 
     ////Todo: ***Using DataAnnotations for validations until Swashbuckle supports FluentValidation***
     //public class UserViewModelValidator : AbstractValidator<UserViewModel>

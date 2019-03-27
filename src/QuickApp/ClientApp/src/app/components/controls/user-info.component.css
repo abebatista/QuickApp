@@ -25,7 +25,6 @@
     border-style: none;
 }
 
-
 .form-group {
     margin-top: 0;
     margin-bottom: 0;
@@ -34,7 +33,6 @@
 input.form-control {
     border-left-width: 5px;
 }
-
 
 .password-well {
     margin-bottom: 0;

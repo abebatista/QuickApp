@@ -9,13 +9,10 @@ import { Observable, Subject } from 'rxjs';
 
 import { Utilities } from '../services/utilities';
 
-
-
 // ******************** Dialog ********************//
 export class AlertDialog {
   constructor(public message: string, public type: DialogType, public okCallback: (val?: any) => any, public cancelCallback: () => any,
     public defaultValue: string, public okLabel: string, public cancelLabel: string) {
-
   }
 }
 
@@ -25,9 +22,6 @@ export enum DialogType {
   prompt
 }
 // ******************** End ********************//
-
-
-
 
 // ******************** Growls ********************//
 export class AlertMessage {
@@ -44,12 +38,8 @@ export enum MessageSeverity {
 }
 // ******************** End ********************//
 
-
-
-
 @Injectable()
 export class AlertService {
-
   private messages = new Subject<AlertMessage>();
   private stickyMessages = new Subject<AlertMessage>();
   private dialogs = new Subject<AlertDialog>();
@@ -57,10 +47,8 @@ export class AlertService {
   private _isLoading = false;
   private loadingMessageId: any;
 
-
   showDialog(message: string, type?: DialogType, okCallback?: (val?: any) => any, cancelCallback?: () => any, okLabel?: string,
     cancelLabel?: string, defaultValue?: string) {
-
     if (!type)
       type = DialogType.alert;
 
@@ -70,14 +58,11 @@ export class AlertService {
     });
   }
 
-
-
   showMessage(summary: string);
   showMessage(summary: string, detail: string, severity: MessageSeverity);
   showMessage(summaryAndDetails: string[], summaryAndDetailsSeparator: string, severity: MessageSeverity);
   showMessage(response: HttpResponseBase, ignoreValue_useNull: string, severity: MessageSeverity);
   showMessage(data: any, separatorOrDetail?: string, severity?: MessageSeverity) {
-
     if (!severity)
       severity = MessageSeverity.default;
 
@@ -98,13 +83,11 @@ export class AlertService {
     }
   }
 
-
   showStickyMessage(summary: string);
   showStickyMessage(summary: string, detail: string, severity: MessageSeverity, error?: any);
   showStickyMessage(summaryAndDetails: string[], summaryAndDetailsSeparator: string, severity: MessageSeverity);
   showStickyMessage(response: HttpResponseBase, ignoreValue_useNull: string, severity: MessageSeverity);
   showStickyMessage(data: string | string[] | HttpResponseBase, separatorOrDetail?: string, severity?: MessageSeverity, error?: any) {
-
     if (!severity)
       severity = MessageSeverity.default;
 
@@ -112,7 +95,6 @@ export class AlertService {
       data = Utilities.getHttpResponseMessage(data);
       separatorOrDetail = Utilities.captionAndMessageSeparator;
     }
-
 
     if (data instanceof Array) {
       for (const message of data) {
@@ -122,9 +104,7 @@ export class AlertService {
       }
     }
     else {
-
       if (error) {
-
         const msg = 'Severity: "${MessageSeverity[severity]}", Summary: "${data}", Detail: "${separatorOrDetail}", ' +
           'Error: "${Utilities.safeStringify(error)}"';
 
@@ -154,17 +134,12 @@ export class AlertService {
     }
   }
 
-
-
   private showMessageHelper(summary: string, detail: string, severity: MessageSeverity, isSticky: boolean) {
-
     if (isSticky)
       this.stickyMessages.next({ severity: severity, summary: summary, detail: detail });
     else
       this.messages.next({ severity: severity, summary: summary, detail: detail });
   }
-
-
 
   startLoadingMessage(message = 'Loading...', caption = '') {
     this._isLoading = true;
@@ -180,8 +155,6 @@ export class AlertService {
     clearTimeout(this.loadingMessageId);
     this.resetStickyMessage();
   }
-
-
 
   logDebug(msg) {
     console.debug(msg);
@@ -207,20 +180,13 @@ export class AlertService {
     console.warn(msg);
   }
 
-
-
-
   resetStickyMessage() {
     this.stickyMessages.next();
   }
 
-
-
-
   getDialogEvent(): Observable<AlertDialog> {
     return this.dialogs.asObservable();
   }
-
 
   getMessageEvent(): Observable<AlertMessage> {
     return this.messages.asObservable();
@@ -229,8 +195,6 @@ export class AlertService {
   getStickyMessageEvent(): Observable<AlertMessage> {
     return this.stickyMessages.asObservable();
   }
-
-
 
   get isLoadingInProgress(): boolean {
     return this._isLoading;

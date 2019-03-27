@@ -12,7 +12,6 @@
     font-size: 200px;
 }
 
-
 .wrapper {
     padding: 0 50px;
     max-width: 1200px;
@@ -22,13 +21,11 @@
     margin-top: 0;
 }
 
-
 .parent-container {
     float: left;
     width: 45%;
     margin: 20px;
 }
-
 
 /* Image zoom on hover + Overlay colour */
 .parent {
@@ -63,11 +60,9 @@
     background-image: url('../../assets/images/demo/quickapp-standard.png');
 }
 
-
 .showcase {
     margin-bottom: -200px;
 }
-
 
     .showcase a {
         display: none;
@@ -112,9 +107,6 @@
     background-color: rgba(52,73,94,0.75);
 }
 
-
-
-
 .more-templates {
     display: block;
     color: #17a2b8;
@@ -144,10 +136,6 @@
         background-color: #17a2b8;
         border-color: #17a2b8;
     }
-
-
-
-
 
 @media screen and (max-width: 768px) {
     .col-sm-4 {

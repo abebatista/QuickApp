@@ -11,7 +11,6 @@ import { Component, ViewChild, ElementRef, Input, Output, EventEmitter } from '@
   styleUrls: ['./search-box.component.css']
 })
 export class SearchBoxComponent {
-
   @Input()
   placeholder = 'Search...';
 
@@ -21,11 +20,9 @@ export class SearchBoxComponent {
   @ViewChild('searchInput')
   searchInput: ElementRef;
 
-
   onValueChange(value: string) {
     setTimeout(() => this.searchChange.emit(value));
   }
-
 
   clear() {
     this.searchInput.nativeElement.value = '';

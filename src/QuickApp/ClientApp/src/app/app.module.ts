@@ -63,9 +63,6 @@ import { UsersManagementComponent } from './components/controls/users-management
 import { RolesManagementComponent } from './components/controls/roles-management.component';
 import { RoleEditorComponent } from './components/controls/role-editor.component';
 
-
-
-
 @NgModule({
   imports: [
     BrowserModule,
@@ -130,9 +127,6 @@ import { RoleEditorComponent } from './components/controls/role-editor.component
 })
 export class AppModule {
 }
-
-
-
 
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;

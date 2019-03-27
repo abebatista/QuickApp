@@ -11,10 +11,8 @@ import { Title } from '@angular/platform-browser';
 
 import { Utilities } from './utilities';
 
-
 @Injectable()
 export class AppTitleService {
-
   sub: Subscription;
   appName: string;
 
@@ -48,5 +46,4 @@ export class AppTitleService {
           this.titleService.setTitle(title);
       });
   }
-
 }

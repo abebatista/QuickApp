@@ -15,8 +15,8 @@
     <PackageProjectUrl>https://github.com/emonney/QuickApp</PackageProjectUrl>
     <Company>EBENMONNEY</Company>
     <Version>2.7.1</Version>
-    <AssemblyVersion>2019.3.27.4</AssemblyVersion>
-    <FileVersion>2019.3.27.4</FileVersion>
+    <AssemblyVersion>2019.3.27.5</AssemblyVersion>
+    <FileVersion>2019.3.27.5</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

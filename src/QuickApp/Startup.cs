@@ -33,12 +33,10 @@ namespace QuickApp
     {
         public IConfiguration Configuration { get; }
 
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -76,9 +74,6 @@ namespace QuickApp
                 options.ClaimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
             });
 
-
-
-
             // Register the OpenIddict services.
             services.AddOpenIddict()
                 .AddCore(options =>
@@ -107,14 +102,11 @@ namespace QuickApp
                 })
                 .AddValidation(); //Only compatible with the default token format. For JWT tokens, use the Microsoft JWT bearer handler.
 
-
-
             // Add cors
             services.AddCors();
 
             // Add framework services.
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -122,17 +114,13 @@ namespace QuickApp
                 configuration.RootPath = "ClientApp/dist";
             });
 
-
             //Todo: ***Using DataAnnotations for validation until Swashbuckle supports FluentValidation***
             //services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
-
 
             //.AddJsonOptions(opts =>
             //{
             //    opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             //});
-
-
 
             services.AddSwaggerGen(c =>
             {
@@ -164,14 +152,11 @@ namespace QuickApp
                 cfg.AddProfile<AutoMapperProfile>();
             });
 
-
             // Configurations
             services.Configure<SmtpConfig>(Configuration.GetSection("SmtpConfig"));
 
-
             // Business Services
             services.AddScoped<IEmailSender, EmailSender>();
-
 
             // Repositories
             services.AddScoped<IUnitOfWork, HttpUnitOfWork>();
@@ -186,7 +171,6 @@ namespace QuickApp
             // DB Creation and Seeding
             services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
         }
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ILogger<Startup> logger, IDatabaseInitializer databaseInitializer)
@@ -219,19 +203,16 @@ namespace QuickApp
                 throw new Exception(LoggingEvents.INIT_DATABASE.Name, ex);
             }
 
-
             //Configure Cors
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod());
 
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseAuthentication();
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -239,7 +220,6 @@ namespace QuickApp
                 c.DocumentTitle = "Swagger UI - Quick Application";
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuickApp API V1");
             });
-
 
             app.UseMvc(routes =>
             {

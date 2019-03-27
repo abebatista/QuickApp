@@ -6,7 +6,6 @@
 import { Directive, ElementRef, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 
-
 declare var $: any;
 
 @Directive({
@@ -14,7 +13,6 @@ declare var $: any;
   exportAs: 'bootstrap-datepicker'
 })
 export class BootstrapDatepickerDirective implements OnInit, OnDestroy {
-
   private _isShown = false;
   private updateTimeout;
   private changedSubscription: Subscription;
@@ -33,10 +31,8 @@ export class BootstrapDatepickerDirective implements OnInit, OnDestroy {
     this.tryUpdate(value);
   }
 
-
   @Output()
   ngModelChange = new EventEmitter();
-
 
   constructor(private el: ElementRef) {
     this.changedSubscription = fromEvent($(this.el.nativeElement), 'change')
@@ -45,8 +41,6 @@ export class BootstrapDatepickerDirective implements OnInit, OnDestroy {
     this.hiddenSubscription = fromEvent($(this.el.nativeElement), 'hide').subscribe((e: any) => this._isShown = false);
   }
 
-
-
   ngOnInit() {
     this.initialize(this.options);
   }
@@ -54,9 +48,6 @@ export class BootstrapDatepickerDirective implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy();
   }
-
-
-
 
   initialize(options?: any) {
     $(this.el.nativeElement).datepicker(options);
@@ -72,25 +63,19 @@ export class BootstrapDatepickerDirective implements OnInit, OnDestroy {
     $(this.el.nativeElement).datepicker('destroy');
   }
 
-
-
   show() {
     $(this.el.nativeElement).datepicker('show');
   }
-
 
   hide() {
     $(this.el.nativeElement).datepicker('hide');
   }
 
-
   toggle() {
     this.isShown ? this.hide() : this.show();
   }
 
-
   private tryUpdate(value) {
-
     clearTimeout(this.updateTimeout);
 
     if (!$(this.el.nativeElement).is(':focus')) {
@@ -107,26 +92,21 @@ export class BootstrapDatepickerDirective implements OnInit, OnDestroy {
     setTimeout(() => $(this.el.nativeElement).datepicker('update', value));
   }
 
-
   setDate(value) {
     setTimeout(() => $(this.el.nativeElement).datepicker('setDate', value));
   }
-
 
   setUTCDate(value) {
     setTimeout(() => $(this.el.nativeElement).datepicker('setUTCDate', value));
   }
 
-
   clearDates() {
     setTimeout(() => $(this.el.nativeElement).datepicker('clearDates'));
   }
 
-
   getDate() {
     $(this.el.nativeElement).datepicker('getDate');
   }
-
 
   getUTCDate() {
     $(this.el.nativeElement).datepicker('getUTCDate');

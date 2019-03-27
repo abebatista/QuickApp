@@ -6,16 +6,13 @@
 import { Injectable } from '@angular/core';
 import { HttpResponseBase, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-
 @Injectable()
 export class Utilities {
-
   public static readonly captionAndMessageSeparator = ':';
   public static readonly noNetworkMessageCaption = 'No Network';
   public static readonly noNetworkMessageDetail = 'The server cannot be reached';
   public static readonly accessDeniedMessageCaption = 'Access Denied!';
   public static readonly accessDeniedMessageDetail = '';
-
 
   public static cookies = {
     getItem: (sKey) => {
@@ -66,13 +63,10 @@ export class Utilities {
     }
   };
 
-
   public static getHttpResponseMessage(data: HttpResponseBase | any): string[] {
-
     const responses: string[] = [];
 
     if (data instanceof HttpResponseBase) {
-
       if (this.checkNoNetwork(data)) {
         responses.push(`${this.noNetworkMessageCaption}${this.captionAndMessageSeparator} ${this.noNetworkMessageDetail}`);
       }
@@ -80,7 +74,6 @@ export class Utilities {
         const responseObject = this.getResponseBody(data);
 
         if (responseObject && (typeof responseObject === 'object' || responseObject instanceof Object)) {
-
           for (const key in responseObject) {
             if (key)
               responses.push(`${key}${this.captionAndMessageSeparator} ${responseObject[key]}`);
@@ -100,14 +93,11 @@ export class Utilities {
     if (this.checkAccessDenied(data))
       responses.splice(0, 0, `${this.accessDeniedMessageCaption}${this.captionAndMessageSeparator} ${this.accessDeniedMessageDetail}`);
 
-
     return responses;
   }
 
-
   public static findHttpResponseMessage(messageToFind: string, data: HttpResponse<any> | any, seachInCaptionOnly = true,
     includeCaptionInResult = false): string {
-
     const searchString = messageToFind.toLowerCase();
     const httpMessages = this.getHttpResponseMessage(data);
 
@@ -121,7 +111,6 @@ export class Utilities {
 
     if (!seachInCaptionOnly) {
       for (const message of httpMessages) {
-
         if (message.toLowerCase().indexOf(searchString) != -1) {
           if (includeCaptionInResult) {
             return message;
@@ -137,7 +126,6 @@ export class Utilities {
     return null;
   }
 
-
   public static getResponseBody(response: HttpResponseBase) {
     if (response instanceof HttpResponse)
       return response.body;
@@ -145,7 +133,6 @@ export class Utilities {
     if (response instanceof HttpErrorResponse)
       return response.error || response.message || response.statusText;
   }
-
 
   public static checkNoNetwork(response: HttpResponseBase) {
     if (response instanceof HttpResponseBase) {
@@ -180,10 +167,7 @@ export class Utilities {
     return false;
   }
 
-
-
   public static getQueryParamsFromString(paramString: string) {
-
     if (!paramString)
       return null;
 
@@ -197,7 +181,6 @@ export class Utilities {
     return params;
   }
 
-
   public static splitInTwo(text: string, separator: string): { firstPart: string, secondPart: string } {
     const separatorIndex = text.indexOf(separator);
 
@@ -210,9 +193,7 @@ export class Utilities {
     return { firstPart: part1, secondPart: part2 };
   }
 
-
   public static safeStringify(object) {
-
     let result: string;
 
     try {
@@ -220,7 +201,6 @@ export class Utilities {
       return result;
     }
     catch (error) {
-
     }
 
     const simpleObject = {};
@@ -243,7 +223,6 @@ export class Utilities {
     return result;
   }
 
-
   public static JSonTryParse(value: string) {
     try {
       return JSON.parse(value);
@@ -256,7 +235,6 @@ export class Utilities {
     }
   }
 
-
   public static TestIsObjectEmpty(obj: any) {
     for (const prop in obj) {
       if (obj.hasOwnProperty(prop)) {
@@ -267,18 +245,14 @@ export class Utilities {
     return true;
   }
 
-
   public static TestIsUndefined(value: any) {
     return typeof value === 'undefined';
     // return value === undefined;
   }
 
-
   public static TestIsString(value: any) {
     return typeof value === 'string' || value instanceof String;
   }
-
-
 
   public static capitalizeFirstLetter(text: string) {
     if (text)
@@ -287,18 +261,15 @@ export class Utilities {
       return text;
   }
 
-
   public static toTitleCase(text: string) {
     return text.replace(/\w\S*/g, (subString) => {
       return subString.charAt(0).toUpperCase() + subString.substr(1).toLowerCase();
     });
   }
 
-
   public static toLowerCase(items: string);
   public static toLowerCase(items: string[]);
   public static toLowerCase(items: any): string | string[] {
-
     if (items instanceof Array) {
       const loweredRoles: string[] = [];
 
@@ -313,16 +284,13 @@ export class Utilities {
     }
   }
 
-
   public static uniqueId() {
     return this.randomNumber(1000000, 9000000).toString();
   }
 
-
   public static randomNumber(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
-
 
   public static baseUrl() {
     let base = '';
@@ -335,9 +303,7 @@ export class Utilities {
     return base.replace(/\/$/, '');
   }
 
-
   public static printDateOnly(date: Date) {
-
     date = new Date(date);
 
     const dayNames = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
@@ -369,7 +335,6 @@ export class Utilities {
   }
 
   public static printTimeOnly(date: Date) {
-
     date = new Date(date);
 
     let period = '';
@@ -391,14 +356,12 @@ export class Utilities {
 
     const timeString = hour + ':' + minute + ' ' + period;
 
-
     return timeString;
   }
 
   public static printDate(date: Date, separator = 'at') {
     return `${Utilities.printDateOnly(date)} ${separator} ${Utilities.printTimeOnly(date)}`;
   }
-
 
   public static printFriendlyDate(date: Date, separator = '-') {
     const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -414,7 +377,6 @@ export class Utilities {
   }
 
   public static printShortDate(date: Date, separator = '/', dateTimeSeparator = '-') {
-
     let day = date.getDate().toString();
     let month = (date.getMonth() + 1).toString();
     const year = date.getFullYear();
@@ -428,11 +390,8 @@ export class Utilities {
     return `${month}${separator}${day}${separator}${year} ${dateTimeSeparator} ${Utilities.printTimeOnly(date)}`;
   }
 
-
   public static parseDate(date) {
-
     if (date) {
-
       if (date instanceof Date) {
         return date;
       }
@@ -450,10 +409,7 @@ export class Utilities {
     }
   }
 
-
-
   public static printDuration(start: Date, end: Date) {
-
     start = new Date(start);
     end = new Date(end);
 
@@ -475,7 +431,6 @@ export class Utilities {
     // what's left is seconds
     const seconds = delta % 60;  // in theory the modulus is not required
 
-
     let printedDays = '';
 
     if (days)
@@ -490,13 +445,11 @@ export class Utilities {
     if (seconds)
       printedDays += printedDays ? ` and ${seconds} seconds` : `${seconds} seconds`;
 
-
     if (!printedDays)
       printedDays = '0';
 
     return printedDays;
   }
-
 
   public static getAge(birthDate, otherDate) {
     birthDate = new Date(birthDate);
@@ -512,18 +465,14 @@ export class Utilities {
     return years;
   }
 
-
   public static searchArray(searchTerm: string, caseSensitive: boolean, ...values: any[]) {
-
     if (!searchTerm)
       return true;
-
 
     if (!caseSensitive)
       searchTerm = searchTerm.toLowerCase();
 
     for (const value of values) {
-
       if (value != null) {
         let strValue = value.toString();
 
@@ -538,9 +487,7 @@ export class Utilities {
     return false;
   }
 
-
   public static moveArrayItem(array: any[], oldIndex, newIndex) {
-
     while (oldIndex < 0) {
       oldIndex += this.length;
     }
@@ -559,9 +506,7 @@ export class Utilities {
     array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
   }
 
-
   public static expandCamelCase(text: string) {
-
     if (!text)
       return text;
 
@@ -570,20 +515,14 @@ export class Utilities {
       .replace(/([^A-Za-z ]+)/g, ' $1');
   }
 
-
   public static testIsAbsoluteUrl(url: string) {
-
     const r = new RegExp('^(?:[a-z]+:)?//', 'i');
     return r.test(url);
   }
 
-
   public static convertToAbsoluteUrl(url: string) {
-
     return Utilities.testIsAbsoluteUrl(url) ? url : '//' + url;
   }
-
-
 
   public static removeNulls(obj) {
     const isArray = obj instanceof Array;
@@ -605,7 +544,6 @@ export class Utilities {
 
     return obj;
   }
-
 
   public static debounce(func: (...args) => any, wait: number, immediate?: boolean) {
     let timeout;

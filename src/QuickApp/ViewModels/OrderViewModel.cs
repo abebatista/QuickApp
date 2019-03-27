@@ -3,10 +3,6 @@
 // Email: support@ebenmonney.com
 // ====================================================
 
-using System;
-using System.Linq;
-
-
 namespace QuickApp.ViewModels
 {
     public class OrderViewModel

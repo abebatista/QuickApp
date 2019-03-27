@@ -20,7 +20,6 @@ import { Permission, PermissionNames, PermissionValues } from '../models/permiss
 
 @Injectable()
 export class AuthService {
-
   public get loginUrl() { return this.configurations.loginUrl; }
   public get homeUrl() { return this.configurations.homeUrl; }
 
@@ -32,12 +31,10 @@ export class AuthService {
   private previousIsLoggedInCheck = false;
   private _loginStatus = new Subject<boolean>();
 
-
   constructor(private router: Router, private configurations: ConfigurationService, private endpointFactory: EndpointFactory,
     private localStorage: LocalStoreManager) {
     this.initializeLoginStatus();
   }
-
 
   private initializeLoginStatus() {
     this.localStorage.getInitEvent().subscribe(() => {
@@ -45,23 +42,18 @@ export class AuthService {
     });
   }
 
-
   gotoPage(page: string, preserveParams = true) {
-
     const navigationExtras: NavigationExtras = {
       queryParamsHandling: preserveParams ? 'merge' : '', preserveFragment: preserveParams
     };
 
-
     this.router.navigate([page], navigationExtras);
   }
-
 
   redirectLoginUser() {
     const redirect = this.loginRedirectUrl && this.loginRedirectUrl != '/' && this.loginRedirectUrl != ConfigurationService.defaultHomeUrl ?
       this.loginRedirectUrl : this.homeUrl;
     this.loginRedirectUrl = null;
-
 
     const urlParamsAndFragment = Utilities.splitInTwo(redirect, '#');
     const urlAndParams = Utilities.splitInTwo(urlParamsAndFragment.firstPart, '?');
@@ -75,7 +67,6 @@ export class AuthService {
     this.router.navigate([urlAndParams.firstPart], navigationExtras);
   }
 
-
   redirectLogoutUser() {
     const redirect = this.logoutRedirectUrl ? this.logoutRedirectUrl : this.loginUrl;
     this.logoutRedirectUrl = null;
@@ -83,15 +74,12 @@ export class AuthService {
     this.router.navigate([redirect]);
   }
 
-
   redirectForLogin() {
     this.loginRedirectUrl = this.router.url;
     this.router.navigate([this.loginUrl]);
   }
 
-
   reLogin() {
-
     this.localStorage.deleteData(DBkeys.TOKEN_EXPIRES_IN);
 
     if (this.reLoginDelegate) {
@@ -102,15 +90,12 @@ export class AuthService {
     }
   }
 
-
   refreshLogin() {
     return this.endpointFactory.getRefreshLoginEndpoint<LoginResponse>().pipe(
       map(response => this.processLoginResponse(response, this.rememberMe)));
   }
 
-
   login(userName: string, password: string, rememberMe?: boolean) {
-
     if (this.isLoggedIn)
       this.logout();
 
@@ -118,9 +103,7 @@ export class AuthService {
       map(response => this.processLoginResponse(response, rememberMe)));
   }
 
-
   private processLoginResponse(response: LoginResponse, rememberMe: boolean) {
-
     const accessToken = response.access_token;
 
     if (accessToken == null)
@@ -161,10 +144,8 @@ export class AuthService {
     return user;
   }
 
-
   private saveUserDetails(user: User, permissions: PermissionValues[], accessToken: string, idToken: string, refreshToken: string,
     expiresIn: Date, rememberMe: boolean) {
-
     if (rememberMe) {
       this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
       this.localStorage.savePermanentData(idToken, DBkeys.ID_TOKEN);
@@ -185,8 +166,6 @@ export class AuthService {
     this.localStorage.savePermanentData(rememberMe, DBkeys.REMEMBER_ME);
   }
 
-
-
   logout(): void {
     this.localStorage.deleteData(DBkeys.ACCESS_TOKEN);
     this.localStorage.deleteData(DBkeys.ID_TOKEN);
@@ -200,9 +179,7 @@ export class AuthService {
     this.reevaluateLoginStatus();
   }
 
-
   private reevaluateLoginStatus(currentUser?: User) {
-
     const user = currentUser || this.localStorage.getDataObject<User>(DBkeys.CURRENT_USER);
     const isLoggedIn = user != null;
 
@@ -215,14 +192,11 @@ export class AuthService {
     this.previousIsLoggedInCheck = isLoggedIn;
   }
 
-
   getLoginStatusEvent(): Observable<boolean> {
     return this._loginStatus.asObservable();
   }
 
-
   get currentUser(): User {
-
     const user = this.localStorage.getDataObject<User>(DBkeys.CURRENT_USER);
     this.reevaluateLoginStatus(user);
 
@@ -234,19 +208,16 @@ export class AuthService {
   }
 
   get accessToken(): string {
-
     this.reevaluateLoginStatus();
     return this.localStorage.getData(DBkeys.ACCESS_TOKEN);
   }
 
   get accessTokenExpiryDate(): Date {
-
     this.reevaluateLoginStatus();
     return this.localStorage.getDataObject<Date>(DBkeys.TOKEN_EXPIRES_IN, true);
   }
 
   get isSessionExpired(): boolean {
-
     if (this.accessTokenExpiryDate == null) {
       return true;
     }
@@ -254,15 +225,12 @@ export class AuthService {
     return !(this.accessTokenExpiryDate.valueOf() > new Date().valueOf());
   }
 
-
   get idToken(): string {
-
     this.reevaluateLoginStatus();
     return this.localStorage.getData(DBkeys.ID_TOKEN);
   }
 
   get refreshToken(): string {
-
     this.reevaluateLoginStatus();
     return this.localStorage.getData(DBkeys.REFRESH_TOKEN);
   }

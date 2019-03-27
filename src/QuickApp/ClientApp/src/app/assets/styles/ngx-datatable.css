@@ -1,4 +1,3 @@
-
 .ngx-datatable.material.table-shadow {
     background: #FFF;
     -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
@@ -140,12 +139,9 @@
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAABCAYAAAD5PA/NAAAAFklEQVQI12PQkNdi1VTQ5gbSwkAsDQARLAIGtOSFUAAAAABJRU5ErkJggg==);
 }
 
-
-
 .ngx-datatable.material .datatable-header {
     border-bottom: 1px solid #ddd;
 }
-
 
 .ngx-datatable.material.colored-header .datatable-header {
     padding: .9rem 0;
@@ -158,12 +154,9 @@
     border-top: 1px solid #ddd;
 }
 
-
-
 .ngx-datatable.material.table-bordered .datatable-header .datatable-header-cell {
     padding: .9rem 1.2rem;
 }
-
 
 .ngx-datatable.material.full-header .datatable-header .datatable-header-cell {
     padding: .9rem 1.2rem;

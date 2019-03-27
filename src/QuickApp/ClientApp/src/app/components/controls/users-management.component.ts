@@ -16,7 +16,6 @@ import { Permission } from '../../models/permission.model';
 import { UserEdit } from '../../models/user-edit.model';
 import { UserInfoComponent } from './user-info.component';
 
-
 @Component({
   selector: 'app-users-management',
   templateUrl: './users-management.component.html',
@@ -32,7 +31,6 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
   loadingIndicator: boolean;
 
   allRoles: Role[] = [];
-
 
   @ViewChild('indexTemplate')
   indexTemplate: TemplateRef<any>;
@@ -56,9 +54,7 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
     private accountService: AccountService) {
   }
 
-
   ngOnInit() {
-
     const gT = (key: string) => this.translationService.getTranslation(key);
 
     this.columns = [
@@ -80,9 +76,7 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
     this.loadData();
   }
 
-
   ngAfterViewInit() {
-
     this.userEditor.changesSavedCallback = () => {
       this.addNewUserToList();
       this.editorModal.hide();
@@ -94,7 +88,6 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
       this.editorModal.hide();
     };
   }
-
 
   addNewUserToList() {
     if (this.sourceUser) {
@@ -130,7 +123,6 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   loadData() {
     this.alertService.startLoadingMessage();
     this.loadingIndicator = true;
@@ -146,7 +138,6 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   onDataLoadSuccessful(users: User[], roles: Role[]) {
     this.alertService.stopLoadingMessage();
     this.loadingIndicator = false;
@@ -161,7 +152,6 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
     this.allRoles = roles;
   }
 
-
   onDataLoadFailed(error: any) {
     this.alertService.stopLoadingMessage();
     this.loadingIndicator = false;
@@ -170,7 +160,6 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
       `Unable to retrieve users from the server.\r\nErrors: "${Utilities.getHttpResponseMessage(error)}"`,
       MessageSeverity.error, error);
   }
-
 
   onSearchChanged(value: string) {
     this.rows = this.rowsCache
@@ -182,14 +171,12 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
     this.userEditor.resetForm(true);
   }
 
-
   newUser() {
     this.editingUserName = null;
     this.sourceUser = null;
     this.editedUser = this.userEditor.newUser(this.allRoles);
     this.editorModal.show();
   }
-
 
   editUser(row: UserEdit) {
     this.editingUserName = { name: row.userName };
@@ -198,15 +185,12 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
     this.editorModal.show();
   }
 
-
   deleteUser(row: UserEdit) {
     this.alertService.showDialog('Are you sure you want to delete \"' + row.userName + '\"?', DialogType.confirm,
       () => this.deleteUserHelper(row));
   }
 
-
   deleteUserHelper(row: UserEdit) {
-
     this.alertService.startLoadingMessage('Deleting...');
     this.loadingIndicator = true;
 
@@ -227,8 +211,6 @@ export class UsersManagementComponent implements OnInit, AfterViewInit {
             MessageSeverity.error, error);
         });
   }
-
-
 
   get canAssignRoles() {
     return this.accountService.userHasPermission(Permission.assignRolesPermission);

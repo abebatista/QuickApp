@@ -6,16 +6,13 @@
 import { Injectable, ErrorHandler } from '@angular/core';
 import { AlertService, MessageSeverity } from './services/alert.service';
 
-
 @Injectable()
 export class AppErrorHandler extends ErrorHandler {
-
   // private alertService: AlertService;
 
   constructor() {
     super();
   }
-
 
   handleError(error: any) {
     // if (this.alertService == null) {

@@ -21,7 +21,6 @@ import { LoginComponent } from '../components/login/login.component';
 
 const alertify: any = require('../assets/scripts/alertify.js');
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -29,7 +28,6 @@ const alertify: any = require('../assets/scripts/alertify.js');
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
-
   isAppLoaded: boolean;
   isUserLoggedIn: boolean;
   shouldShowLoginModal: boolean;
@@ -49,9 +47,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   loginModal: ModalDirective;
   loginControl: LoginComponent;
 
-
   get notificationsTitle() {
-
     const gT = (key: string) => this.translationService.getTranslation(key);
 
     if (this.newNotificationCount)
@@ -60,17 +56,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       return gT('app.Notifications');
   }
 
-
   constructor(storageManager: LocalStoreManager, private toastaService: ToastaService, private toastaConfig: ToastaConfig,
     private accountService: AccountService, private alertService: AlertService, private notificationService: NotificationService,
     private appTitleService: AppTitleService, private authService: AuthService, private translationService: AppTranslationService,
     public configurations: ConfigurationService, public router: Router) {
-
     storageManager.initialiseStorageSyncListener();
 
     translationService.addLanguages(['en', 'fr', 'de', 'pt', 'ar', 'ko']);
     translationService.setDefaultLanguage('en');
-
 
     this.toastaConfig.theme = 'bootstrap';
     this.toastaConfig.position = 'top-right';
@@ -80,9 +73,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.appTitleService.appName = this.appTitle;
   }
 
-
   ngAfterViewInit() {
-
     this.modalLoginControls.changes.subscribe((controls: QueryList<any>) => {
       controls.forEach(control => {
         if (control) {
@@ -99,11 +90,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-
   onLoginModalShown() {
     this.alertService.showStickyMessage('Session Expired', 'Your Session has expired. Please log in again', MessageSeverity.info);
   }
-
 
   onLoginModalHidden() {
     this.alertService.resetStickyMessage();
@@ -116,11 +105,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
   onLoginModalHide() {
     this.alertService.resetStickyMessage();
   }
-
 
   ngOnInit() {
     this.isUserLoggedIn = this.authService.isLoggedIn;
@@ -140,7 +127,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }, 2000);
 
-
     this.alertService.getDialogEvent().subscribe(alert => this.showDialog(alert));
     this.alertService.getMessageEvent().subscribe(message => this.showToast(message, false));
     this.alertService.getStickyMessageEvent().subscribe(message => this.showToast(message, true));
@@ -149,7 +135,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.authService.getLoginStatusEvent().subscribe(isLoggedIn => {
       this.isUserLoggedIn = isLoggedIn;
-
 
       if (this.isUserLoggedIn) {
         this.initNotificationsLoading();
@@ -176,21 +161,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-
   ngOnDestroy() {
     this.unsubscribeNotifications();
   }
-
 
   private unsubscribeNotifications() {
     if (this.notificationsLoadingSubscription)
       this.notificationsLoadingSubscription.unsubscribe();
   }
 
-
-
   initNotificationsLoading() {
-
     this.notificationsLoadingSubscription = this.notificationService.getNewNotificationsPeriodically()
       .subscribe(notifications => {
         this.dataLoadingConsecutiveFailurs = 0;
@@ -206,9 +186,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         });
   }
 
-
   markNotificationsAsRead() {
-
     const recentNotifications = this.notificationService.recentNotifications;
 
     if (recentNotifications.length) {
@@ -223,15 +201,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           error => {
             this.alertService.logError(error);
             this.alertService.showMessage('Notification Error', 'Marking read notifications failed', MessageSeverity.error);
-
           });
     }
   }
 
-
-
   showDialog(dialog: AlertDialog) {
-
     alertify.set({
       labels: {
         ok: dialog.okLabel || 'OK',
@@ -273,12 +247,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
-
-
-
   showToast(message: AlertMessage, isSticky: boolean) {
-
     if (message == null) {
       for (const id of this.stickyToasties.slice(0)) {
         this.toastaService.clear(id);
@@ -292,7 +261,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       msg: message.detail,
       timeout: isSticky ? 0 : 4000
     };
-
 
     if (isSticky) {
       toastOptions.onAdd = (toast: ToastData) => this.stickyToasties.push(toast.id);
@@ -309,7 +277,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       };
     }
 
-
     switch (message.severity) {
       case MessageSeverity.default: this.toastaService.default(toastOptions); break;
       case MessageSeverity.info: this.toastaService.info(toastOptions); break;
@@ -320,31 +287,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
-
-
-
   logout() {
     this.authService.logout();
     this.authService.redirectLogoutUser();
   }
 
-
   getYear() {
     return new Date().getUTCFullYear();
   }
-
 
   get userName(): string {
     return this.authService.currentUser ? this.authService.currentUser.userName : '';
   }
 
-
   get fullName(): string {
     return this.authService.currentUser ? this.authService.currentUser.fullName : '';
   }
-
-
 
   get canViewCustomers() {
     return this.accountService.userHasPermission(Permission.viewUsersPermission); // eg. viewCustomersPermission

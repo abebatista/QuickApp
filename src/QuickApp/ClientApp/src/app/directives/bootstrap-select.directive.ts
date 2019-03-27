@@ -13,7 +13,6 @@ declare var $: any;
   exportAs: 'bootstrap-select'
 })
 export class BootstrapSelectDirective implements OnInit, OnDestroy {
-
   private oldValues: string | string[] = '';
 
   private changedSubscription: Subscription;
@@ -28,7 +27,6 @@ export class BootstrapSelectDirective implements OnInit, OnDestroy {
     setTimeout(() => this.selected = values);
   }
 
-
   @Output()
   ngModelChange = new EventEmitter();
 
@@ -37,7 +35,6 @@ export class BootstrapSelectDirective implements OnInit, OnDestroy {
 
   @Output()
   hidden = new EventEmitter();
-
 
   constructor(private el: ElementRef) {
     this.changedSubscription = fromEvent($(this.el.nativeElement), 'changed.bs.select').subscribe(e => setTimeout(() => {
@@ -52,7 +49,6 @@ export class BootstrapSelectDirective implements OnInit, OnDestroy {
       .subscribe(e => setTimeout(() => this.hidden.emit()));
   }
 
-
   ngOnInit() {
     $(this.el.nativeElement).selectpicker();
 
@@ -63,7 +59,6 @@ export class BootstrapSelectDirective implements OnInit, OnDestroy {
       this.refresh();
       this.doValidation();
     });
-
   }
 
   ngOnDestroy() {
@@ -95,7 +90,6 @@ export class BootstrapSelectDirective implements OnInit, OnDestroy {
     return this.required === '' || this.required == 'true';
   }
 
-
   refresh() {
     setTimeout(() => {
       $(this.el.nativeElement).selectpicker('refresh');
@@ -108,14 +102,11 @@ export class BootstrapSelectDirective implements OnInit, OnDestroy {
     });
   }
 
-
   get valid(): boolean {
     return this.requiredAttribute ? this.selected && this.selected.length > 0 : true;
   }
 
-
   set selected(values: string | string[]) {
-
     if (!this.checkIsValuesChanged(values))
       return;
 
@@ -123,7 +114,6 @@ export class BootstrapSelectDirective implements OnInit, OnDestroy {
     $(this.el.nativeElement).selectpicker('val', values);
     this.doValidation();
   }
-
 
   get selected(): string | string[] {
     return $(this.el.nativeElement).selectpicker('val');
